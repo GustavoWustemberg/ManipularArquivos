@@ -1,5 +1,6 @@
 import os
 import shutil
+import tqdm
 
 opcao = 0
 
@@ -12,29 +13,30 @@ while opcao < 6:
                       '5 - Criar nova pasta\n'
                       '6 - Sair\n'))
     if(opcao == 1):
-        folder = input('Selecione a pasta onde será alterados os arquivos: ')
-        folderLink = r'{}\\'.format(folder)
+        root_folder = input('Digite o caminho onde estão os arquivos: ')
+        root_folder = root_folder + '\\'
         name = input('Digite o novo nome do arquivo: ')
-        tipo = input('Digite o tipo do arquivo: ')
-        contador = 0
+        numinitial = int(input('Digite o valor inicial a ser acrescentado ao nome: '))
         numaux = ''
-        numinicial = int(input('Digite o valor inicial a ser acrescentado ao nome: '))
+        contador = 0
 
-        for file_name in os.listdir(folderLink):
-            if (numinicial == 1):
-                contador += 1
-            else:
-                contador = numinicial
-                numinicial += 1
-            if (contador < 10):
-                numaux = 0
-            else:
-                numaux = ''
-            old_name = folderLink + file_name
-            new_name = folderLink + f'{name}-{numaux}{contador}.{tipo}'
-            os.rename(old_name, new_name)
+        for root, dirs, files in os.walk(root_folder):
+            for file in files:
+                filename, extension = os.path.splitext(file)
+                if (numinitial == 1):
+                    contador += 1
+                else:
+                    contador = numinitial
+                    numinitial += 1
+                if (contador < 10):
+                    numaux = 0
+                else:
+                    numaux = ''
+                old_name = root_folder + filename + extension
+                new_name = root_folder + f'{name}-{numaux}{contador}{extension}'
+                os.rename(old_name, new_name)
 
-        print(os.listdir(folderLink))
+
 
     elif(opcao == 2):
         caminho_1 = input('Informe o caminho da pasta onde estão os arquivos: ')
